@@ -1,0 +1,52 @@
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="{{ url_for('index') }}" class="brand"><span class="mark">{{ c.site.mark }}</span> {{ c.site.name }}</a>
+        <p>{{ c.footer.tagline }}</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          {% for p in c.home.products[:5] %}
+          <li><a href="{{ url_for('index') }}#product">{{ p.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="{{ url_for('about') }}">About Us</a></li>
+          <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
+          <li><a href="{{ url_for('about') }}#careers">Careers</a></li>
+          <li><a href="{{ url_for('index') }}#demo">Book a Demo</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="{{ url_for('pricing') }}#faq">FAQ</a></li>
+          <li><a href="#">Blog &amp; News</a></li>
+          <li><a href="#">HIPAA Compliance</a></li>
+          <li><a href="#">Partners</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Security</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>{{ c.footer.copyright }} · <a href="{{ url_for('admin_login') }}" style="color:inherit; text-decoration:underline;">Admin</a></span>
+      <div class="footer-social">
+        <a href="#">in</a>
+        <a href="#">X</a>
+        <a href="#">f</a>
+      </div>
+    </div>
+  </div>
+</footer>

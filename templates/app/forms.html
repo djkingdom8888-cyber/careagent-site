@@ -1,0 +1,36 @@
+{% extends "app/layout.html" %}
+{% block title %}Form Builder{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>Form Builder</h1>
+    <p>Custom forms your team can fill out — intake packets, incident reports, care plan updates.</p>
+  </div>
+  {% if session.get('app_role') == 'owner' %}
+  <a href="{{ url_for('app_form_new') }}" class="p-btn p-btn-primary">+ New form</a>
+  {% endif %}
+</div>
+
+{% if form_list %}
+<div class="resident-grid">
+  {% for f in form_list %}
+  <a class="resident-card" href="{{ url_for('app_form_detail', form_id=f['id']) }}">
+    <div class="avatar" style="border-radius:10px;">📄</div>
+    <strong>{{ f['name'] }}</strong>
+    <span>{{ f['description'] or 'No description' }}</span>
+    {% if not f['active'] %}<span class="badge held" style="display:inline-block; margin-top:8px;">Inactive</span>{% endif %}
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="p-card">
+  <div class="widget-empty" style="padding:30px 8px;">
+    <span class="emoji">📄</span>
+    <strong>No forms yet.</strong>
+    <span>{% if session.get('app_role') == 'owner' %}Click "New form" to build your first one.{% else %}Ask your administrator to set one up.{% endif %}</span>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

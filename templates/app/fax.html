@@ -1,0 +1,61 @@
+{% extends "app/layout.html" %}
+{% block title %}Fax{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>Fax</h1>
+    <p>Send records to pharmacies, physicians, or other providers.</p>
+  </div>
+</div>
+
+<div class="flash error" style="background:var(--p-amber-100); color:var(--p-amber);">
+  No fax provider is connected yet (e.g. Twilio, sfax) — faxes below are saved as a queue only and are <strong>not actually transmitted</strong>. Connecting a real fax API is what makes "Send" mean send.
+</div>
+
+<div class="p-card" style="max-width:560px;">
+  <h3>Queue a fax</h3>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-row">
+      <div class="p-field"><label>To fax number</label><input type="text" name="to_number" placeholder="(555) 555-0100" required></div>
+      <div class="p-field"><label>Recipient name</label><input type="text" name="to_name" placeholder="e.g. Riverside Pharmacy"></div>
+    </div>
+    <div class="p-field">
+      <label>Resident (optional)</label>
+      <select name="resident_id">
+        <option value="">— Not resident-specific —</option>
+        {% for r in residents %}
+        <option value="{{ r['id'] }}">{{ r['name'] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="p-field"><label>Subject</label><input type="text" name="subject" placeholder="e.g. Medication order refill"></div>
+    <div class="p-field"><label>Note</label><textarea name="note"></textarea></div>
+    <button type="submit" class="p-btn p-btn-primary">Queue fax</button>
+  </form>
+</div>
+
+<div class="p-card">
+  <h3>Fax queue</h3>
+  {% if fax_list %}
+  <table class="p-table">
+    <thead><tr><th>Date</th><th>To</th><th>Resident</th><th>Subject</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for f in fax_list %}
+      <tr>
+        <td>{{ f['created_at'] }}</td>
+        <td>{{ f['to_name'] or '—' }} <span class="p-hint">{{ f['to_number'] }}</span></td>
+        <td>{{ f['resident_name'] or '—' }}</td>
+        <td>{{ f['subject'] or '—' }}</td>
+        <td><span class="badge held">{{ f['status']|capitalize }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="p-empty">Nothing queued yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

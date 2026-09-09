@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{% block title %}Admin{% endblock %} · CareAgent Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}" />
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="brand"><span class="mark">CA</span> CareAgent Admin</div>
+    {% for group in groups %}
+    <div class="admin-nav-group">
+      <h4>{{ group.label }}</h4>
+      {% for s in group.sections %}
+      <a href="{{ url_for('admin_section', slug=s) }}" class="{{ 'active' if (slug is defined) and (s == slug) else '' }}">{{ sections[s].title.split(' · ', 1)[-1] }}</a>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    <div class="admin-nav-group">
+      <h4>Client Accounts</h4>
+      <a href="{{ url_for('admin_facilities') }}">Facilities &amp; Logins</a>
+    </div>
+    <div class="sidebar-foot">
+      <a href="{{ url_for('index') }}" target="_blank" rel="noopener">↗ View live site</a>
+      <a href="{{ url_for('app_login') }}" target="_blank" rel="noopener">↗ Open care app</a>
+      <a href="{{ url_for('admin_settings') }}">⚙ Settings</a>
+      <a href="{{ url_for('admin_logout') }}">⎋ Log out</a>
+    </div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="crumb">Admin</div>
+        <h1>{% block heading %}Dashboard{% endblock %}</h1>
+      </div>
+      {% block topbar_actions %}{% endblock %}
+    </div>
+    <div class="admin-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+</body>
+</html>

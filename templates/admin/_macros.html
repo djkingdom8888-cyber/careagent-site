@@ -1,0 +1,21 @@
+{% macro text_input(name, value, form_owner=none, placeholder='') %}
+<input type="text" name="{{ name }}" value="{{ value }}"{% if form_owner %} form="{{ form_owner }}"{% endif %}{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}>
+{% endmacro %}
+
+{% macro textarea_input(name, value, form_owner=none, rows=4, placeholder='') %}
+<textarea name="{{ name }}" rows="{{ rows }}"{% if form_owner %} form="{{ form_owner }}"{% endif %}{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}>{{ value }}</textarea>
+{% endmacro %}
+
+{% macro checkbox_input(name, checked, label_text, form_owner=none) %}
+<label class="a-checkbox"><input type="checkbox" name="{{ name }}"{% if form_owner %} form="{{ form_owner }}"{% endif %}{% if checked %} checked{% endif %}> {{ label_text }}</label>
+{% endmacro %}
+
+{% macro render_field(name, value, f, form_owner=none) %}
+  {% if f.get('type') == 'checkbox' %}
+    {{ checkbox_input(name, value, f.label, form_owner=form_owner) }}
+  {% elif f.get('type') in ('textarea', 'lines') %}
+    {{ textarea_input(name, value, form_owner=form_owner, placeholder='One per line' if f.get('type') == 'lines' else '') }}
+  {% else %}
+    {{ text_input(name, value, form_owner=form_owner) }}
+  {% endif %}
+{% endmacro %}

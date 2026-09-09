@@ -1,0 +1,52 @@
+{% extends "app/layout.html" %}
+{% block title %}{{ 'Edit Resident' if resident else 'Add Resident' }}{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_residents_list') }}">← Residents</a></div>
+
+<div class="papp-head">
+  <div>
+    <h1>{{ 'Edit ' + resident['name'] if resident else 'Add a resident' }}</h1>
+  </div>
+</div>
+
+<div class="p-card" style="max-width:640px;">
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-row">
+      <div class="p-field">
+        <label>Full name</label>
+        <input type="text" name="name" value="{{ resident['name'] if resident else '' }}" required>
+      </div>
+      <div class="p-field">
+        <label>Room</label>
+        <input type="text" name="room" value="{{ resident['room'] if resident else '' }}">
+      </div>
+    </div>
+    <div class="p-row">
+      <div class="p-field">
+        <label>Date of birth</label>
+        <input type="text" name="date_of_birth" placeholder="MM/DD/YYYY" value="{{ resident['date_of_birth'] if resident else '' }}">
+      </div>
+      <div class="p-field">
+        <label>Emergency contact</label>
+        <input type="text" name="emergency_contact" placeholder="Name, phone" value="{{ resident['emergency_contact'] if resident else '' }}">
+      </div>
+    </div>
+    <div class="p-field">
+      <label>Allergies</label>
+      <textarea name="allergies">{{ resident['allergies'] if resident else '' }}</textarea>
+    </div>
+    <div class="p-field">
+      <label>Diagnoses</label>
+      <textarea name="diagnoses">{{ resident['diagnoses'] if resident else '' }}</textarea>
+    </div>
+    <div class="p-field">
+      <label>General notes</label>
+      <textarea name="notes">{{ resident['notes'] if resident else '' }}</textarea>
+    </div>
+    <button type="submit" class="p-btn p-btn-primary">{{ 'Save changes' if resident else 'Add resident' }}</button>
+  </form>
+</div>
+
+{% endblock %}

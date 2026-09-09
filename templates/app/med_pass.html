@@ -1,0 +1,42 @@
+{% extends "app/layout.html" %}
+{% block title %}eMar — Med Pass{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>eMar — Med Pass</h1>
+    <p>Every scheduled dose across the facility, today · {{ today }}</p>
+  </div>
+</div>
+
+<div class="p-card">
+  {% if rows %}
+    {% for row in rows %}
+    <div class="chart-row">
+      <div class="info">
+        <strong>{{ row['scheduled_time'] }} — {{ row['resident_name'] }} <span style="font-weight:400; color:var(--p-slate);">(Room {{ row['room'] or '—' }})</span></strong>
+        <span>{{ row['med_name'] }} {{ row['dose'] }} · {{ row['route'] }}</span>
+      </div>
+      <div class="chart-actions">
+        <span class="badge {{ row['status'] }}">{{ row['status']|capitalize }}</span>
+        {% for s in ['given', 'missed', 'refused', 'held'] %}
+        <form method="post" action="{{ url_for('app_mar_mark', resident_id=row['resident_id'], mar_log_id=row['id']) }}" style="display:inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="status" value="{{ s }}">
+          <input type="hidden" name="next" value="med-pass">
+          <button type="submit" class="p-btn p-btn-outline p-btn-sm">{{ s|capitalize }}</button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="widget-empty" style="padding:30px 8px;">
+      <span class="emoji">💊</span>
+      <strong>No meds here!</strong>
+      <span>This widget is running on empty!</span>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

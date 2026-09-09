@@ -1,0 +1,62 @@
+{% extends "app/layout.html" %}
+{% block title %}{{ document['title'] }}{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_signatures') }}">← Digital Signature</a></div>
+
+<div class="papp-head"><div><h1>{{ document['title'] }}</h1></div></div>
+
+<div class="p-card">
+  <h3>Document text</h3>
+  <p style="white-space:pre-wrap; font-size:14.5px; color:var(--p-ink);">{{ document['body'] or 'No document text was added.' }}</p>
+</div>
+
+<div class="p-card" style="max-width:560px;">
+  <h3>Sign this document</h3>
+  <form id="sig-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="signature_data" id="sig-data">
+    <div class="p-row">
+      <div class="p-field"><label>Signer name</label><input type="text" name="signer_name" required></div>
+      <div class="p-field">
+        <label>Signing as</label>
+        <select name="signer_role">
+          <option value="Resident">Resident</option>
+          <option value="Family / POA">Family / POA</option>
+          <option value="Staff">Staff</option>
+          <option value="Physician">Physician</option>
+        </select>
+      </div>
+    </div>
+    <div class="p-field">
+      <label>Draw signature below</label>
+      <canvas id="sig-canvas" width="560" height="180"></canvas>
+      <p class="p-hint"><button type="button" id="sig-clear" class="p-btn p-btn-outline p-btn-sm" style="margin-top:8px;">Clear</button></p>
+    </div>
+    <button type="submit" class="p-btn p-btn-primary">Save signature</button>
+  </form>
+</div>
+
+<div class="p-card">
+  <h3>Signed by</h3>
+  {% if signatures %}
+  <table class="p-table">
+    <thead><tr><th>Signature</th><th>Name</th><th>Role</th><th>Signed</th></tr></thead>
+    <tbody>
+      {% for s in signatures %}
+      <tr>
+        <td><img class="sig-thumb" src="{{ s['signature_data'] }}" alt="signature"></td>
+        <td>{{ s['signer_name'] }}</td>
+        <td>{{ s['signer_role'] or '—' }}</td>
+        <td>{{ s['signed_at'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="p-empty">No one has signed this yet.</p>
+  {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='js/signature-pad.js') }}"></script>
+{% endblock %}

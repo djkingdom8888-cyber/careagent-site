@@ -1,0 +1,151 @@
+{% extends "app/layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="dash-greeting">
+  <h1>Hello, {{ current_facility().name if current_facility() else session.get('app_full_name','') }} 👋</h1>
+  <p>{{ today }}</p>
+</div>
+
+<div class="qa-row">
+  <a class="qa-item" href="{{ url_for('app_med_pass') }}"><span class="qa-ic">💊</span> Med Pass</a>
+  <a class="qa-item" href="{{ url_for('app_task_manager') }}"><span class="qa-ic">☑</span> Tasks &amp; ADLs</a>
+  <a class="qa-item" href="{{ url_for('app_med_pass') }}"><span class="qa-ic">📋</span> Med Log</a>
+  <a class="qa-item" href="{{ url_for('app_coming_soon', label='Notes') }}"><span class="qa-ic">📝</span> Notes</a>
+  <a class="qa-item" href="{{ url_for('app_signatures') }}"><span class="qa-ic">✎</span> Digital Sig.</a>
+  <a class="qa-item" href="{{ url_for('app_forms') }}"><span class="qa-ic">📄</span> Forms</a>
+  <a class="qa-item" href="{{ url_for('app_coming_soon', label='Incidents') }}"><span class="qa-ic">⚠</span> Incidents</a>
+</div>
+
+<div class="widget-grid">
+
+  <div class="widget-col">
+    <div class="widget-card">
+      <h3>Facility</h3>
+      <div class="widget-tabs"><span class="active">Facility</span><span>Documents</span><span>Forms</span></div>
+      <div class="stat-pair">
+        <div><strong>{{ stats.resident_count }}</strong><span>Residents</span></div>
+        <div><strong>{{ facility_age_days }}</strong><span>Days Without Incidents</span></div>
+      </div>
+    </div>
+
+    <div class="widget-card">
+      <h3>My Notes</h3>
+      <div class="widget-tabs"><span class="active">My Notes</span><span>Resident</span><span>Facility</span></div>
+      <div class="widget-empty">
+        <span class="emoji">📝</span>
+        <strong>No unread notes.</strong>
+        <span>You read all notes and done a great job!</span>
+      </div>
+    </div>
+
+    <div class="widget-card">
+      <h3>Staff <a class="widget-link" href="{{ url_for('app_manage_facility') }}">Manage →</a></h3>
+      {% if staff %}
+        <div style="display:grid; gap:12px; margin-top:12px;">
+          {% for u in staff %}
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="width:28px;height:28px;border-radius:50%; background:linear-gradient(135deg, var(--p-teal), var(--p-navy)); color:white; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;">{{ (u['full_name'] or u['username'])[:2]|upper }}</span>
+              <span style="font-size:13.5px; font-weight:600;">{{ u['full_name'] or u['username'] }}</span>
+            </div>
+            <span class="badge {{ 'given' if u['role'] == 'owner' else 'due' }}">{{ 'Owner / Admin' if u['role'] == 'owner' else 'Caregiver' }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="widget-empty"><span class="emoji">🧑‍⚕️</span><strong>No staff yet.</strong></div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="widget-col">
+    <div class="widget-card">
+      <h3>Residents <a class="widget-link" href="{{ url_for('app_residents_list') }}">View all →</a></h3>
+      <div class="widget-tabs"><span class="active">Residents</span><span>Assessments</span><span>Care Plan</span><span>Documents</span><span>Forms</span></div>
+      {% if residents %}
+        <div style="display:grid; gap:10px; margin-top:6px;">
+          {% for r in residents[:4] %}
+          <a href="{{ url_for('app_resident_detail', resident_id=r['id']) }}" style="display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--p-ink); font-weight:600;">
+            <span style="width:28px;height:28px;border-radius:50%; background:linear-gradient(135deg, var(--p-teal), var(--p-navy)); display:inline-block;"></span>
+            {{ r['name'] }} <span style="color:var(--p-slate); font-weight:400;">— Room {{ r['room'] or '—' }}</span>
+          </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="widget-empty">
+          <span class="emoji">🐼</span>
+          <strong>No residents yet?</strong>
+          <span>Must be a quiet place!</span>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="widget-card">
+      <h3>Medications</h3>
+      <div class="widget-tabs"><span>Refills</span><span>Expiring</span><span>Refused</span><span>Discontinued</span><span class="active">Recent</span></div>
+      {% if stats.meds_total > 0 %}
+        <div class="stat-pair">
+          <div><strong>{{ stats.meds_given }}</strong><span>Given today</span></div>
+          <div><strong>{{ stats.meds_due }}</strong><span>Still due</span></div>
+        </div>
+      {% else %}
+        <div class="widget-empty">
+          <span class="emoji">💊</span>
+          <strong>No meds here!</strong>
+          <span>This widget is running on empty!</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="widget-col">
+    <div class="widget-card">
+      <h3>Timer</h3>
+      <div class="timer-box">
+        <span class="time">⏳ 00m 00s</span>
+        <button class="p-btn p-btn-primary p-btn-sm" type="button" disabled title="Time tracking isn't wired up yet">Clock In</button>
+      </div>
+    </div>
+
+    <div class="widget-card">
+      <h3>Alerts</h3>
+      <div class="widget-tabs"><span class="active">Medications</span><span>Health Monitor</span><span>Pharmacy</span></div>
+      {% if stats.meds_due > 0 %}
+        <p style="font-size:13.5px; margin-top:10px;"><span class="badge due">{{ stats.meds_due }} due</span> medication{{ 's' if stats.meds_due != 1 }} still need charting today — <a href="{{ url_for('app_med_pass') }}" style="color:var(--p-teal-600); font-weight:700;">open Med Pass →</a></p>
+      {% else %}
+        <div class="widget-empty">
+          <span class="emoji">🐼</span>
+          <strong>Medication alert?</strong>
+          <span>Not today!</span>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="widget-card">
+      <h3>Task Manager <a class="widget-link" href="{{ url_for('app_task_manager') }}">+ Add New</a></h3>
+      <div class="widget-tabs"><span class="active">Today</span><span>Missed</span><span>Upcoming</span></div>
+      {% if stats.tasks_total > 0 and stats.tasks_due > 0 %}
+        <p style="font-size:13.5px; margin-top:10px;"><span class="badge due">{{ stats.tasks_due }} pending</span> task{{ 's' if stats.tasks_due != 1 }} today — <a href="{{ url_for('app_task_manager') }}" style="color:var(--p-teal-600); font-weight:700;">open Task Manager →</a></p>
+      {% else %}
+        <div class="widget-empty">
+          <span class="emoji">✅</span>
+          <strong>No tasks left undone.</strong>
+          <span>A perfect track record!</span>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="widget-card">
+      <h3>Upcoming Birthdays</h3>
+      <div class="widget-tabs"><span class="active">Residents</span><span>Staff</span></div>
+      <div class="widget-empty">
+        <span class="emoji">🎂</span>
+        <strong>No residents found.</strong>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

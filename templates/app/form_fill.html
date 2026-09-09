@@ -1,0 +1,50 @@
+{% extends "app/layout.html" %}
+{% block title %}Fill — {{ form['name'] }}{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_form_detail', form_id=form['id']) }}">← {{ form['name'] }}</a></div>
+
+<div class="papp-head"><div><h1>{{ form['name'] }}</h1><p>{{ form['description'] or '' }}</p></div></div>
+
+<div class="p-card" style="max-width:620px;">
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-field">
+      <label>Resident (optional)</label>
+      <select name="resident_id">
+        <option value="">— Not resident-specific —</option>
+        {% for r in residents %}
+        <option value="{{ r['id'] }}">{{ r['name'] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    {% for f in fields %}
+    <div class="p-field">
+      <label>{{ f['label'] }}{% if f['required'] %} *{% endif %}</label>
+      {% if f['field_type'] == 'textarea' %}
+        <textarea name="field-{{ f['id'] }}" {% if f['required'] %}required{% endif %}></textarea>
+      {% elif f['field_type'] == 'select' %}
+        <select name="field-{{ f['id'] }}" {% if f['required'] %}required{% endif %}>
+          <option value="">Choose one…</option>
+          {% for opt in f['options'].split(',') %}
+          <option value="{{ opt.strip() }}">{{ opt.strip() }}</option>
+          {% endfor %}
+        </select>
+      {% elif f['field_type'] == 'checkbox' %}
+        <label class="a-checkbox" style="display:flex; align-items:center; gap:8px; font-weight:400;">
+          <input type="checkbox" name="field-{{ f['id'] }}" style="width:17px;height:17px;"> Yes
+        </label>
+      {% elif f['field_type'] == 'date' %}
+        <input type="date" name="field-{{ f['id'] }}" {% if f['required'] %}required{% endif %}>
+      {% else %}
+        <input type="text" name="field-{{ f['id'] }}" {% if f['required'] %}required{% endif %}>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="p-btn p-btn-primary">Submit form</button>
+  </form>
+</div>
+
+{% endblock %}

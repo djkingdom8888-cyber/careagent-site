@@ -1,0 +1,382 @@
+{
+  "site": {
+    "name": "CareAgent",
+    "mark": "CA",
+    "tagline": "AI-assisted software for care homes, assisted living, and long-term care communities."
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Built for care, not just paperwork",
+      "heading": "Software built for",
+      "heading_accent": "modern residential care",
+      "lead": "Updated lead text for smoke test.",
+      "cta_primary": "Get Started",
+      "cta_secondary": "Book a Demo",
+      "stats": [
+        {
+          "value": "1,900+",
+          "label": "care communities"
+        },
+        {
+          "value": "38%",
+          "label": "fewer med errors reported"
+        },
+        {
+          "value": "4.9 / 5",
+          "label": "average customer rating"
+        }
+      ]
+    },
+    "logos": [
+      "Willow Creek Living",
+      "Harborview Senior Care",
+      "Cedarbrook Communities",
+      "Sunridge Assisted Living",
+      "Magnolia Manor"
+    ],
+    "value_props": [
+      {
+        "icon": "✓",
+        "title": "HIPAA-compliant by design",
+        "text": "Encrypted records, granular audit trails, and access logs built in from day one — not bolted on."
+      },
+      {
+        "icon": "▧",
+        "title": "Role-based access controls",
+        "text": "Give caregivers, nurses, and administrators exactly the access their role requires — no more, no less."
+      },
+      {
+        "icon": "⚡",
+        "title": "Real-time alerts",
+        "text": "Missed medications, overdue ADLs, and vitals out of range surface instantly to the right person."
+      }
+    ],
+    "products": [
+      {
+        "icon": "Rx",
+        "title": "eMAR",
+        "text": "Digital medication administration records with built-in compliance tracking and alerts."
+      },
+      {
+        "icon": "EHR",
+        "title": "EHR",
+        "text": "Electronic health records designed around senior living workflows, not hospital charts."
+      },
+      {
+        "icon": "✓",
+        "title": "Tasks & ADLs",
+        "text": "Track daily activities of living and caregiver tasks with timestamped accountability."
+      },
+      {
+        "icon": "📄",
+        "title": "Forms & Documents",
+        "text": "Digitize intake packets, care plans, and resident files into searchable, secure records."
+      },
+      {
+        "icon": "📊",
+        "title": "Reports & Analytics",
+        "text": "Operational dashboards and care-quality insights for administrators and owners."
+      },
+      {
+        "icon": "✎",
+        "title": "Digital Signature",
+        "text": "Capture consent and care-plan sign-off electronically, with a full audit trail."
+      },
+      {
+        "icon": "☏",
+        "title": "CareAgent Fax",
+        "text": "Send and receive HIPAA-compliant faxes directly from the platform — no fax machine required."
+      },
+      {
+        "icon": "℞+",
+        "title": "Pharmacy Integration",
+        "text": "Sync orders and medication changes directly with your pharmacy partner."
+      }
+    ],
+    "ai_banner": {
+      "eyebrow": "CareAgent AI",
+      "heading": "An AI care assistant that watches the details, so your team doesn't have to",
+      "text": "CareAgent AI reads the shift in real time — flagging missed meds, drafting progress notes from voice, and surfacing risk before it becomes an incident.",
+      "cta": "See CareAgent AI in action",
+      "points": [
+        "Voice-to-note charting that drafts documentation for caregiver review",
+        "Predictive alerts for missed tasks, medication conflicts, and vitals trends",
+        "Plain-language survey & audit prep, generated from existing records"
+      ],
+      "chat": [
+        {
+          "from": "bot",
+          "text": "Resident in 214 missed their 8:00a dose — want me to notify the on-call nurse?"
+        },
+        {
+          "from": "me",
+          "text": "Yes, and log it."
+        },
+        {
+          "from": "bot",
+          "text": "Done — nurse notified, incident logged, family portal updated."
+        }
+      ]
+    },
+    "compliance": {
+      "eyebrow": "Compliance & trust",
+      "heading": "Built to hold up under survey — not just for daily use",
+      "checklist": [
+        "Every entry is timestamped and attributed, creating a defensible audit trail.",
+        "Export full resident records in minutes when surveyors or licensors ask.",
+        "Role-based permissions keep PHI access limited to who actually needs it.",
+        "Automatic backups and encryption at rest and in transit."
+      ],
+      "stats": [
+        {
+          "value": "99.98%",
+          "label": "Platform uptime"
+        },
+        {
+          "value": "<2min",
+          "label": "Avg. record export"
+        },
+        {
+          "value": "SOC 2",
+          "label": "Type II in progress"
+        }
+      ],
+      "audit_rows": [
+        {
+          "label": "eMAR entry — Rm 214",
+          "status": "Verified"
+        },
+        {
+          "label": "Care plan signature — Rm 108",
+          "status": "Verified"
+        },
+        {
+          "label": "ADL log — Rm 301",
+          "status": "Verified"
+        },
+        {
+          "label": "Incident report filed",
+          "status": "Reviewed"
+        },
+        {
+          "label": "Pharmacy order sync",
+          "status": "Complete"
+        }
+      ]
+    },
+    "testimonials": {
+      "eyebrow": "What care teams say",
+      "heading": "Trusted by the people doing the caregiving",
+      "ratings": [
+        {
+          "value": "4.9 / 5",
+          "label": "Google Reviews"
+        },
+        {
+          "value": "4.8 / 5",
+          "label": "G2 Rating"
+        },
+        {
+          "value": "76",
+          "label": "Net Promoter Score"
+        }
+      ],
+      "quotes": [
+        {
+          "quote": "We cut our medication documentation time nearly in half. The alerts alone have prevented several near-misses.",
+          "name": "Denise Alvarez",
+          "role": "Director of Nursing, Willow Creek Living"
+        },
+        {
+          "quote": "Our last state survey took a fraction of the time because every record was already organized and exportable.",
+          "name": "Thomas Whitfield",
+          "role": "Administrator, Cedarbrook Communities"
+        },
+        {
+          "quote": "Caregivers actually like using it. That alone tells you it was built by people who understand this work.",
+          "name": "Priya Nathan",
+          "role": "Operations Manager, Sunridge Assisted Living"
+        }
+      ]
+    },
+    "cta": {
+      "heading": "See CareAgent in your community",
+      "text": "Book a 20-minute walkthrough with our team — no pressure, just a look at how it fits your workflow."
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Our story",
+      "heading": "Built by caregivers, for caregivers",
+      "text": "CareAgent was founded by nurses, administrators, and technologists who were tired of watching good care teams get buried in paperwork instead of spending time with residents."
+    },
+    "story": {
+      "eyebrow": "Why we started",
+      "heading": "We saw great care teams held back by software that wasn't built for them",
+      "paragraphs": [
+        "Our founders spent a combined 65+ years working inside assisted living and skilled nursing communities before starting CareAgent. Again and again, they saw the same problem: software built for hospitals, awkwardly repurposed for residential care — slow, rigid, and disconnected from how caregivers actually work.",
+        "So they built something different: a platform designed from day one around the rhythm of a care home shift, with AI doing the tedious watching-and-flagging work so people can focus on people."
+      ],
+      "stats": [
+        {
+          "value": "65+",
+          "label": "Years of combined senior care experience among founders"
+        },
+        {
+          "value": "2021",
+          "label": "CareAgent founded"
+        },
+        {
+          "value": "1,900+",
+          "label": "Care communities supported today"
+        },
+        {
+          "value": "50",
+          "label": "States with active CareAgent communities"
+        }
+      ]
+    },
+    "mission": {
+      "eyebrow": "Our mission",
+      "heading": "Raise the standard of care with technology teams can trust",
+      "text": "We measure our success by fewer errors, less burnout, and more time spent actually caring for residents."
+    },
+    "timeline": [
+      {
+        "year": "2021",
+        "title": "CareAgent founded",
+        "text": "Started by a small team of former DONs and long-term care administrators."
+      },
+      {
+        "year": "2022",
+        "title": "eMAR & EHR launch",
+        "text": "First communities go live on the core medication and health record modules."
+      },
+      {
+        "year": "2024",
+        "title": "Passed 1,000 communities",
+        "text": "Expanded into forms, digital signature, and pharmacy integrations."
+      },
+      {
+        "year": "2026",
+        "title": "CareAgent AI launches",
+        "text": "Introduced voice-to-note charting and predictive care alerts platform-wide."
+      }
+    ],
+    "team": [
+      {
+        "initials": "MJ",
+        "name": "Maria Jansen",
+        "role": "Co-Founder & CEO"
+      },
+      {
+        "initials": "RK",
+        "name": "Robert Kim",
+        "role": "Co-Founder & CTO"
+      },
+      {
+        "initials": "SB",
+        "name": "Sandra Boyle, RN",
+        "role": "VP of Medical Compliance"
+      },
+      {
+        "initials": "DP",
+        "name": "David Park",
+        "role": "VP of Customer Success"
+      }
+    ],
+    "cta": {
+      "heading": "See CareAgent in your community",
+      "text": "Book a 20-minute walkthrough with our team."
+    },
+    "core_values": [
+      {
+        "icon": "◆",
+        "title": "Integrity",
+        "text": "We're honest about what our software can and can't do — with customers and with each other."
+      },
+      {
+        "icon": "◈",
+        "title": "Community",
+        "text": "We build alongside the caregivers and administrators who use CareAgent every day."
+      },
+      {
+        "icon": "◇",
+        "title": "Innovation",
+        "text": "We challenge outdated systems instead of quietly digitizing them."
+      },
+      {
+        "icon": "○",
+        "title": "Simplicity",
+        "text": "If a feature makes a caregiver's day harder, it doesn't ship."
+      }
+    ]
+  },
+  "pricing": {
+    "hero": {
+      "eyebrow": "Pricing",
+      "heading": "Plans built to scale with your community",
+      "text": "Straightforward, per-resident pricing — no hidden setup fees. Every plan includes onboarding and unlimited support."
+    },
+    "plans": [
+      {
+        "name": "Essentials",
+        "desc": "",
+        "featured": false,
+        "badge": "",
+        "price_monthly": "",
+        "price_annual": "",
+        "price_suffix": "",
+        "cta_label": "",
+        "features": []
+      }
+    ],
+    "addons": [
+      {
+        "name": "CareAgent AI",
+        "text": "Voice-to-note charting and predictive care alerts for any plan tier.",
+        "price": "+$3 / resident / mo"
+      },
+      {
+        "name": "Pharmacy Integration",
+        "text": "Direct order sync with your preferred pharmacy partner.",
+        "price": "+$2 / resident / mo"
+      },
+      {
+        "name": "Family Portal",
+        "text": "Give families secure, read-only visibility into care updates.",
+        "price": "+$1 / resident / mo"
+      }
+    ],
+    "faq": [
+      {
+        "q": "Is there a setup or implementation fee?",
+        "a": "No. Onboarding, data migration, and staff training are included on every plan, regardless of size."
+      },
+      {
+        "q": "Can I switch plans later?",
+        "a": "Yes — upgrade or downgrade at any time. Changes take effect on your next billing cycle."
+      },
+      {
+        "q": "Is CareAgent HIPAA compliant?",
+        "a": "Yes. All plans include encryption at rest and in transit, role-based access controls, and full audit logging."
+      },
+      {
+        "q": "Do you offer a trial?",
+        "a": "Yes, we offer a guided 30-day pilot for one wing or unit before a full community rollout."
+      },
+      {
+        "q": "What does \"per resident\" mean if occupancy changes?",
+        "a": "Billing is based on active resident records each month, so you're never paying for empty beds."
+      }
+    ],
+    "cta": {
+      "heading": "Ready to see CareAgent in action?",
+      "text": "Book a 20-minute walkthrough tailored to your community's size and needs."
+    }
+  },
+  "footer": {
+    "tagline": "AI-assisted software for care homes, assisted living, and long-term care communities.",
+    "copyright": "© 2026 CareAgent, Inc. All rights reserved. (Demo site)"
+  }
+}

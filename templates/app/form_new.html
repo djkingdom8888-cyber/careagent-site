@@ -1,0 +1,24 @@
+{% extends "app/layout.html" %}
+{% block title %}New Form{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_forms') }}">← Form Builder</a></div>
+
+<div class="papp-head"><div><h1>New form</h1></div></div>
+
+<div class="p-card" style="max-width:520px;">
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-field">
+      <label>Form name</label>
+      <input type="text" name="name" placeholder="e.g. Fall Incident Report" required>
+    </div>
+    <div class="p-field">
+      <label>Description</label>
+      <textarea name="description" placeholder="What is this form for?"></textarea>
+    </div>
+    <button type="submit" class="p-btn p-btn-primary">Create form</button>
+  </form>
+</div>
+
+{% endblock %}

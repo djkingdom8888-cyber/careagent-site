@@ -1,0 +1,81 @@
+{% extends "admin/layout.html" %}
+{% import "admin/_macros.html" as m %}
+{% block title %}{{ schema.title }}{% endblock %}
+{% block heading %}{{ schema.title }}{% endblock %}
+{% block topbar_actions %}
+  <button type="submit" form="main-form" class="a-btn a-btn-primary">Save changes</button>
+{% endblock %}
+{% block content %}
+
+<form id="main-form" method="post" action="{{ url_for('admin_section', slug=slug) }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+<div class="a-card">
+  <h3>Content</h3>
+  <p class="a-card-sub">These fields map directly onto this section of the page.</p>
+  {% for f in schema.fields %}
+  <div class="a-field">
+    <label>{{ f.label }}</label>
+    {{ m.render_field('field-' ~ f.key, node.get(f.key, ''), f) }}
+  </div>
+  {% endfor %}
+</div>
+
+{% for sub in schema.get('sublists', []) %}
+<div class="a-card">
+  <h3>{{ sub.label }}</h3>
+  {% set items = node.get(sub.key, []) %}
+  {% if not items %}<p class="a-empty">Nothing here yet — add the first one below.</p>{% endif %}
+
+  {% for item in items %}
+  <div class="a-list-item">
+    <span class="a-list-index">#{{ loop.index }}</span>
+    {% if sub.kind == 'stringlist' %}
+      {{ m.textarea_input('sub-' ~ sub.key ~ '-' ~ loop.index0, item, rows=2) if sub.get('textarea') else m.text_input('sub-' ~ sub.key ~ '-' ~ loop.index0, item) }}
+    {% else %}
+      {% for f in sub.fields %}
+      <div class="a-field">
+        <label>{{ f.label }}</label>
+        {% set val = (item.get(f.key, []) | join('\n')) if f.get('type') == 'lines' else item.get(f.key, '') %}
+        {{ m.render_field('sub-' ~ sub.key ~ '-' ~ loop.index0 ~ '-' ~ f.key, val, f) }}
+      </div>
+      {% endfor %}
+    {% endif %}
+    <div class="a-list-item-foot">
+      <button type="submit" formaction="{{ url_for('admin_sublist_delete', slug=slug, subkey=sub.key, idx=loop.index0) }}" formmethod="post" class="a-btn a-btn-danger a-btn-sm" onclick="return confirm('Remove this item?')">Delete</button>
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="a-list-item a-add-card">
+    <span class="a-list-index">Add new</span>
+    {% if sub.kind == 'stringlist' %}
+      {{ m.textarea_input('new', '', form_owner='add-' ~ sub.key, rows=2) if sub.get('textarea') else m.text_input('new', '', form_owner='add-' ~ sub.key, placeholder=sub.get('item_label', 'New item')) }}
+    {% else %}
+      {% for f in sub.fields %}
+      <div class="a-field">
+        <label>{{ f.label }}</label>
+        {{ m.render_field('new-' ~ f.key, '', f, form_owner='add-' ~ sub.key) }}
+      </div>
+      {% endfor %}
+    {% endif %}
+    <div class="a-list-item-foot">
+      <button type="submit" form="add-{{ sub.key }}" class="a-btn a-btn-outline a-btn-sm">+ Add {{ sub.label }}</button>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<div class="a-sticky-save">
+  <button type="submit" class="a-btn a-btn-primary">Save changes</button>
+  <span class="a-hint">Saves everything on this page, including any edits above.</span>
+</div>
+</form>
+
+{% for sub in schema.get('sublists', []) %}
+<form id="add-{{ sub.key }}" action="{{ url_for('admin_sublist_add', slug=slug, subkey=sub.key) }}" method="post" style="display:none">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+</form>
+{% endfor %}
+
+{% endblock %}

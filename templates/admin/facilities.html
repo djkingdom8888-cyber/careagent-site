@@ -1,0 +1,93 @@
+{% extends "admin/layout.html" %}
+{% block title %}Client Accounts{% endblock %}
+{% block heading %}Client Accounts{% endblock %}
+{% block content %}
+
+<div class="a-card">
+  <h3>Create a new client (Adult Family Home)</h3>
+  <p class="a-card-sub">This creates the facility account and its first "owner" login — hand that username/password to your client.</p>
+  <form method="post" action="{{ url_for('admin_facilities') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="a-field">
+      <label>Facility name</label>
+      <input type="text" name="facility_name" placeholder="e.g. Willow Creek AFH" required>
+    </div>
+    <div class="a-row">
+      <div class="a-field">
+        <label>Owner username</label>
+        <input type="text" name="owner_username" required>
+      </div>
+      <div class="a-field">
+        <label>Owner full name</label>
+        <input type="text" name="owner_name">
+      </div>
+    </div>
+    <div class="a-field">
+      <label>Owner password</label>
+      <input type="text" name="owner_password" placeholder="At least 8 characters" required minlength="8">
+      <p class="a-hint">Shown here in plain text once, on purpose, so you can hand it to your client — it's stored as a hash, never in plain text.</p>
+    </div>
+    <button type="submit" class="a-btn a-btn-primary">Create client account</button>
+  </form>
+</div>
+
+<div class="a-card">
+  <h3>Existing clients</h3>
+  {% if facilities %}
+    {% for f in facilities %}
+    <div class="a-list-item">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+        <strong style="font-size:15px; color:var(--a-navy);">{{ f['name'] }}</strong>
+        <form method="post" action="{{ url_for('admin_facility_open', facility_id=f['id']) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="a-btn a-btn-primary a-btn-sm">Open as this client →</button>
+        </form>
+      </div>
+      <p class="a-hint" style="margin:2px 0 14px;">Created {{ f['created_at'] }} · Login at <code>/app/login</code></p>
+      <table class="p-table" style="width:100%; margin-bottom:14px;">
+        <thead><tr><th style="text-align:left; font-size:11.5px; color:var(--a-slate);">Username</th><th style="text-align:left; font-size:11.5px; color:var(--a-slate);">Name</th><th style="text-align:left; font-size:11.5px; color:var(--a-slate);">Role</th><th></th></tr></thead>
+        <tbody>
+        {% for u in users_by_facility.get(f['id'], []) %}
+          <tr>
+            <td style="padding:6px 0;">{{ u['username'] }}</td>
+            <td style="padding:6px 0;">{{ u['full_name'] or '—' }}</td>
+            <td style="padding:6px 0;">{{ u['role'] }}</td>
+            <td style="padding:6px 0;">
+              <form method="post" action="{{ url_for('admin_facility_reset_password', user_id=u['id']) }}" style="display:flex; gap:6px;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="text" name="new_password" placeholder="New password" minlength="8" style="padding:6px 9px; border:1px solid var(--a-border); border-radius:7px; font-size:12.5px;">
+                <button type="submit" class="a-btn a-btn-outline a-btn-sm">Reset password</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <details>
+        <summary style="cursor:pointer; font-size:13px; font-weight:600; color:var(--a-teal-600);">+ Add a staff login</summary>
+        <form method="post" action="{{ url_for('admin_facility_add_user', facility_id=f['id']) }}" style="margin-top:12px;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="a-row">
+            <div class="a-field"><label>Username</label><input type="text" name="username" required></div>
+            <div class="a-field"><label>Full name</label><input type="text" name="full_name"></div>
+          </div>
+          <div class="a-row">
+            <div class="a-field"><label>Password</label><input type="text" name="password" minlength="8" required></div>
+            <div class="a-field"><label>Role</label>
+              <select name="role" style="width:100%; padding:10px 13px; border:1px solid var(--a-border); border-radius:9px; font-size:14.5px;">
+                <option value="caregiver">Caregiver</option>
+                <option value="owner">Owner / Administrator</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="a-btn a-btn-primary a-btn-sm">Add login</button>
+        </form>
+      </details>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="a-empty">No client accounts yet — create the first one above.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

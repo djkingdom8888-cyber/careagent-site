@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{% block title %}Dashboard{% endblock %} · CareAgent</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
+</head>
+<body class="papp-body">
+{% set facility = current_facility() %}
+{% set endpoint = request.endpoint %}
+<div class="papp-shell">
+  <aside class="papp-sidebar">
+    <div class="brand"><span class="mark">CA</span> CareAgent</div>
+
+    <a href="{{ url_for('app_dashboard') }}" class="papp-nav-link {{ 'active' if endpoint == 'app_dashboard' }}"><span class="ic">⌂</span> Dashboard</a>
+
+    <div class="papp-nav-group-label"><span>👤 Administration</span></div>
+    <div class="papp-nav-sub">
+      <a href="{{ url_for('app_manage_facility') }}" class="papp-nav-link {{ 'active' if endpoint == 'app_manage_facility' }}"><span class="ic">🏠</span> Manage Facility</a>
+      <a href="{{ url_for('app_residents_list') }}" class="papp-nav-link {{ 'active' if endpoint in ['app_residents_list','app_resident_detail','app_resident_new','app_resident_edit'] }}"><span class="ic">❤</span> Resident Care</a>
+      <a href="{{ url_for('app_med_pass') }}" class="papp-nav-link {{ 'active' if endpoint == 'app_med_pass' }}"><span class="ic">💊</span> eMar</a>
+      <a href="{{ url_for('app_task_manager') }}" class="papp-nav-link {{ 'active' if endpoint == 'app_task_manager' }}"><span class="ic">☑</span> Task Manager</a>
+      <a href="{{ url_for('app_forms') }}" class="papp-nav-link {{ 'active' if endpoint in ['app_forms','app_form_new','app_form_detail','app_form_fill'] }}"><span class="ic">📄</span> Form Builder</a>
+      <a href="{{ url_for('app_signatures') }}" class="papp-nav-link {{ 'active' if endpoint in ['app_signatures','app_signature_new','app_signature_detail'] }}"><span class="ic">✎</span> Digital Signature</a>
+      <a href="{{ url_for('app_fax') }}" class="papp-nav-link {{ 'active' if endpoint == 'app_fax' }}"><span class="ic">☏</span> Fax <span class="papp-badge-new">New</span></a>
+      <a href="{{ url_for('app_reports') }}" class="papp-nav-link {{ 'active' if endpoint == 'app_reports' }}"><span class="ic">📊</span> Reports</a>
+    </div>
+
+    <a href="{{ url_for('app_coming_soon', label='Resources') }}" class="papp-nav-link"><span class="ic">📚</span> Resources</a>
+
+    <div class="papp-sidebar-foot">
+      <a href="{{ url_for('app_logout') }}" class="papp-nav-link">⎋ Log out</a>
+    </div>
+  </aside>
+
+  <main class="papp-main">
+    <div class="papp-header-bar">
+      {% if facility %}<span class="facility-pill">⌂ {{ facility.name }}</span>{% else %}<span></span>{% endif %}
+      <span class="who">{{ session.get('app_full_name', '') }} · {{ session.get('app_role', '')|capitalize }}</span>
+    </div>
+    <div class="papp-wrap">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+</body>
+</html>

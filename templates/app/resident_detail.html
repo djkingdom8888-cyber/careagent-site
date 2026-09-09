@@ -1,0 +1,92 @@
+{% extends "app/layout.html" %}
+{% block title %}{{ resident['name'] }}{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_residents_list') }}">← Residents</a></div>
+
+<div class="papp-head">
+  <div>
+    <h1>{{ resident['name'] }}</h1>
+    <p>Room {{ resident['room'] or '—' }} · {{ today }}</p>
+  </div>
+  {% if session.get('app_role') == 'owner' %}
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <a href="{{ url_for('app_resident_edit', resident_id=resident['id']) }}" class="p-btn p-btn-outline p-btn-sm">Edit info</a>
+    <a href="{{ url_for('app_medications', resident_id=resident['id']) }}" class="p-btn p-btn-outline p-btn-sm">Manage medications</a>
+    <a href="{{ url_for('app_tasks_manage', resident_id=resident['id']) }}" class="p-btn p-btn-outline p-btn-sm">Manage tasks</a>
+    <a href="{{ url_for('app_billing', resident_id=resident['id']) }}" class="p-btn p-btn-outline p-btn-sm">Billing</a>
+    <form method="post" action="{{ url_for('app_resident_archive', resident_id=resident['id']) }}" onsubmit="return confirm('Archive {{ resident['name'] }}? This hides them from the active resident list.');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="p-btn p-btn-danger p-btn-sm">Archive</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+<div class="p-card">
+  <h3>Resident info</h3>
+  <div class="p-row">
+    <div><span class="p-hint">Allergies</span><p style="margin:2px 0 0;">{{ resident['allergies'] or '—' }}</p></div>
+    <div><span class="p-hint">Diagnoses</span><p style="margin:2px 0 0;">{{ resident['diagnoses'] or '—' }}</p></div>
+  </div>
+  <div class="p-row" style="margin-top:12px;">
+    <div><span class="p-hint">Emergency contact</span><p style="margin:2px 0 0;">{{ resident['emergency_contact'] or '—' }}</p></div>
+    <div><span class="p-hint">Notes</span><p style="margin:2px 0 0;">{{ resident['notes'] or '—' }}</p></div>
+  </div>
+</div>
+
+<div class="p-card">
+  <h3>Today's medications (eMAR)</h3>
+  <p class="sub">Mark each dose as it's given. Every action is timestamped and attributed to your login.</p>
+  {% if mar_rows %}
+    {% for row in mar_rows %}
+    <div class="chart-row">
+      <div class="info">
+        <strong>{{ row['scheduled_time'] }} — {{ row['med_name'] }} {{ row['dose'] }}</strong>
+        <span>{{ row['route'] }}{% if row['note'] %} · {{ row['note'] }}{% endif %}</span>
+      </div>
+      <div class="chart-actions">
+        <span class="badge {{ row['status'] }}">{{ row['status']|capitalize }}</span>
+        {% for s in ['given', 'missed', 'refused', 'held'] %}
+        <form method="post" action="{{ url_for('app_mar_mark', resident_id=resident['id'], mar_log_id=row['id']) }}" style="display:inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="status" value="{{ s }}">
+          <button type="submit" class="p-btn p-btn-outline p-btn-sm">{{ s|capitalize }}</button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="p-empty">No medications scheduled. {% if session.get('app_role') == 'owner' %}<a href="{{ url_for('app_medications', resident_id=resident['id']) }}">Add one →</a>{% endif %}</p>
+  {% endif %}
+</div>
+
+<div class="p-card">
+  <h3>Today's tasks (ADLs)</h3>
+  <p class="sub">Daily care tasks for this resident.</p>
+  {% if task_rows %}
+    {% for row in task_rows %}
+    <div class="chart-row">
+      <div class="info">
+        <strong>{{ row['title'] }}</strong>
+        <span>{{ row['shift']|capitalize }} shift{% if row['note'] %} · {{ row['note'] }}{% endif %}</span>
+      </div>
+      <div class="chart-actions">
+        <span class="badge {{ row['status'] }}">{{ row['status']|capitalize }}</span>
+        {% for s in ['done', 'missed'] %}
+        <form method="post" action="{{ url_for('app_task_mark', resident_id=resident['id'], task_log_id=row['id']) }}" style="display:inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="status" value="{{ s }}">
+          <button type="submit" class="p-btn p-btn-outline p-btn-sm">{{ s|capitalize }}</button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="p-empty">No tasks set up. {% if session.get('app_role') == 'owner' %}<a href="{{ url_for('app_tasks_manage', resident_id=resident['id']) }}">Add one →</a>{% endif %}</p>
+  {% endif %}
+</div>
+
+{% endblock %}

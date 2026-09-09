@@ -1,0 +1,34 @@
+{% extends "admin/layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="a-card">
+  <h3>Welcome back{% if session.get('username') %}, {{ session.get('username') }}{% endif %}</h3>
+  <p class="a-card-sub" style="margin-bottom:0;">Every section below maps to a part of the live site. Edit a section, hit Save, and the public pages update immediately — no rebuild needed.</p>
+</div>
+
+<div class="dash-grid">
+  {% for group in groups %}
+  <div class="dash-card">
+    <h4>{{ group.label }}</h4>
+    <ul>
+      {% for slug in group.sections %}
+      <li><a href="{{ url_for('admin_section', slug=slug) }}">{{ sections[slug].title.split(' · ', 1)[-1] }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="a-card" style="margin-top:24px;">
+  <h3>Live pages</h3>
+  <p class="a-card-sub">Open the public site in a new tab to see your edits.</p>
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <a class="a-btn a-btn-outline a-btn-sm" href="{{ url_for('index') }}" target="_blank" rel="noopener">Home ↗</a>
+    <a class="a-btn a-btn-outline a-btn-sm" href="{{ url_for('about') }}" target="_blank" rel="noopener">About ↗</a>
+    <a class="a-btn a-btn-outline a-btn-sm" href="{{ url_for('pricing') }}" target="_blank" rel="noopener">Pricing ↗</a>
+  </div>
+</div>
+
+{% endblock %}

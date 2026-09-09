@@ -1,0 +1,34 @@
+<header class="site-header">
+  <div class="wrap">
+    <a href="{{ url_for('index') }}" class="brand"><span class="mark">{{ c.site.mark }}</span> {{ c.site.name }}</a>
+
+    <nav class="nav-desktop">
+      <div class="has-dropdown">
+        <a href="{{ url_for('index') }}#product" class="nav-link">Product</a>
+        <div class="dropdown">
+          {% for p in c.home.products %}
+          <a href="{{ url_for('index') }}#product"><span class="ic">{{ p.icon }}</span><span><strong>{{ p.title }}</strong><span>{{ p.text }}</span></span></a>
+          {% endfor %}
+        </div>
+      </div>
+      <a href="{{ url_for('about') }}" class="nav-link">About Us</a>
+      <a href="{{ url_for('pricing') }}" class="nav-link">Pricing</a>
+      <a href="{{ url_for('pricing') }}#faq" class="nav-link">Resources</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="{{ url_for('app_login') }}" class="nav-link" style="margin-right:2px;">Client Login</a>
+      <a href="{{ url_for('index') }}#demo" class="btn btn-outline">Book a Demo</a>
+      <a href="{{ url_for('pricing') }}" class="btn btn-primary">Get Started</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-nav">
+    <a href="{{ url_for('index') }}#product">Product</a>
+    <a href="{{ url_for('about') }}">About Us</a>
+    <a href="{{ url_for('pricing') }}">Pricing</a>
+    <a href="{{ url_for('app_login') }}">Client Login</a>
+    <a href="{{ url_for('index') }}#demo">Book a Demo</a>
+    <a href="{{ url_for('pricing') }}" class="btn btn-primary btn-block">Get Started</a>
+  </div>
+</header>

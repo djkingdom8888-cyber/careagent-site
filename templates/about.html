@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}About {{ c.site.name }} — {{ c.about.hero.heading }}{% endblock %}
+{% block description %}{{ c.about.hero.text }}{% endblock %}
+{% block content %}
+
+<section class="page-hero">
+  <div class="wrap">
+    <span class="eyebrow">{{ c.about.hero.eyebrow }}</span>
+    <h1>{{ c.about.hero.heading }}</h1>
+    <p>{{ c.about.hero.text }}</p>
+  </div>
+</section>
+
+<!-- ============ STORY ============ -->
+<section class="section bg-white">
+  <div class="wrap">
+    <div class="story">
+      <div>
+        <span class="eyebrow">{{ c.about.story.eyebrow }}</span>
+        <h2 style="font-size:clamp(26px,3vw,36px); margin-top:16px; color:var(--navy);">{{ c.about.story.heading }}</h2>
+        {% for p in c.about.story.paragraphs %}
+        <p style="margin-top:18px; color:var(--slate); font-size:16px;">{{ p }}</p>
+        {% endfor %}
+      </div>
+      <div class="story-art">
+        {% for s in c.about.story.stats %}
+        <div class="story-stat"><strong>{{ s.value }}</strong><span>{{ s.label }}</span></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MISSION ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">{{ c.about.mission.eyebrow }}</span>
+      <h2>{{ c.about.mission.heading }}</h2>
+      <p>{{ c.about.mission.text }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUES ============ -->
+<section class="section bg-white">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">What guides us</span>
+      <h2>Our values</h2>
+    </div>
+    <div class="values-grid">
+      {% for v in c.about.core_values %}
+      <div class="value-pill">
+        <div class="ic">{{ v.icon }}</div>
+        <h3>{{ v.title }}</h3>
+        <p>{{ v.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Milestones</span>
+      <h2>Where we've been</h2>
+    </div>
+    <div class="timeline">
+      {% for t in c.about.timeline %}
+      <div class="timeline-row">
+        <strong>{{ t.year }}</strong>
+        <div class="t-body"><h4>{{ t.title }}</h4><p>{{ t.text }}</p></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEAM ============ -->
+<section class="section bg-white" id="careers">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Leadership</span>
+      <h2>The team behind {{ c.site.name }}</h2>
+      <p>A distributed team of clinicians, engineers, and customer success specialists.</p>
+    </div>
+    <div class="team-grid">
+      {% for m in c.about.team %}
+      <div class="team-card">
+        <div class="team-photo">{{ m.initials }}</div>
+        <strong>{{ m.name }}</strong>
+        <span>{{ m.role }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    <p style="text-align:center; margin-top:36px; color:var(--slate); font-size:14.5px;">Interested in joining us? <a href="#" style="color:var(--teal-600); font-weight:700;">View open roles →</a></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>{{ c.about.cta.heading }}</h2>
+      <p>{{ c.about.cta.text }}</p>
+      <div class="hero-ctas">
+        <a href="{{ url_for('pricing') }}" class="btn btn-primary btn-lg">Get Started</a>
+        <a href="{{ url_for('index') }}#demo" class="btn btn-outline btn-lg">Book a Demo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

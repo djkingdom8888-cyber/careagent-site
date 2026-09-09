@@ -1,0 +1,38 @@
+{% extends "app/layout.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>Reports</h1>
+    <p>Today's operational snapshot · {{ today }}</p>
+  </div>
+</div>
+
+<div class="widget-grid" style="grid-template-columns: repeat(3, 1fr);">
+  <div class="widget-card">
+    <h3>Residents</h3>
+    <div class="stat-pair"><div><strong>{{ stats.resident_count }}</strong><span>Active residents</span></div></div>
+  </div>
+  <div class="widget-card">
+    <h3>Medications today</h3>
+    <div class="stat-pair">
+      <div><strong>{{ stats.meds_given }}</strong><span>Given</span></div>
+      <div><strong>{{ stats.meds_due }}</strong><span>Still due</span></div>
+    </div>
+  </div>
+  <div class="widget-card">
+    <h3>Tasks today</h3>
+    <div class="stat-pair">
+      <div><strong>{{ stats.tasks_done }}</strong><span>Done</span></div>
+      <div><strong>{{ stats.tasks_due }}</strong><span>Pending</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="p-card" style="margin-top:20px;">
+  <h3 style="margin-bottom:6px;">More reports</h3>
+  <p class="p-empty" style="margin:0;">Deeper trend reports (survey/audit exports, med-error tracking, billing summaries across all residents) aren't built yet — this page shows today's live snapshot only.</p>
+</div>
+
+{% endblock %}

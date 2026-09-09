@@ -1,0 +1,35 @@
+{% extends "app/layout.html" %}
+{% block title %}Digital Signature{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>Digital Signature</h1>
+    <p>Documents ready for e-consent or care-plan sign-off.</p>
+  </div>
+  {% if session.get('app_role') == 'owner' %}
+  <a href="{{ url_for('app_signature_new') }}" class="p-btn p-btn-primary">+ New document</a>
+  {% endif %}
+</div>
+
+{% if documents %}
+<div class="resident-grid">
+  {% for d in documents %}
+  <a class="resident-card" href="{{ url_for('app_signature_detail', document_id=d['id']) }}">
+    <div class="avatar" style="border-radius:10px;">✎</div>
+    <strong>{{ d['title'] }}</strong>
+    <span>{{ d['resident_name'] or 'Facility-wide' }} · {{ d['signature_count'] }} signature{{ 's' if d['signature_count'] != 1 }}</span>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="p-card">
+  <div class="widget-empty" style="padding:30px 8px;">
+    <span class="emoji">✎</span>
+    <strong>No documents yet.</strong>
+    <span>{% if session.get('app_role') == 'owner' %}Click "New document" to create one.{% else %}Ask your administrator to set one up.{% endif %}</span>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "app/layout.html" %}
+{% block title %}Medications — {{ resident['name'] }}{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_resident_detail', resident_id=resident['id']) }}">← {{ resident['name'] }}</a></div>
+
+<div class="papp-head">
+  <div>
+    <h1>Medications</h1>
+    <p>Manage {{ resident['name'] }}'s medication list. Times are used to build the daily eMAR checklist.</p>
+  </div>
+</div>
+
+<div class="p-card">
+  <h3>Current medications</h3>
+  {% if meds %}
+  <table class="p-table">
+    <thead><tr><th>Name</th><th>Dose</th><th>Route</th><th>Times</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for m in meds %}
+      <tr>
+        <td>{{ m['name'] }}</td>
+        <td>{{ m['dose'] }}</td>
+        <td>{{ m['route'] }}</td>
+        <td>{{ m['times'] }}</td>
+        <td>{% if m['active'] %}<span class="badge given">Active</span>{% else %}<span class="badge missed">Inactive</span>{% endif %}</td>
+        <td>
+          {% if m['active'] %}
+          <form method="post" action="{{ url_for('app_medication_deactivate', resident_id=resident['id'], med_id=m['id']) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="p-btn p-btn-danger p-btn-sm">Deactivate</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="p-empty">No medications yet — add the first one below.</p>
+  {% endif %}
+</div>
+
+<div class="p-card" style="max-width:560px;">
+  <h3>Add a medication</h3>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-field">
+      <label>Medication name</label>
+      <input type="text" name="name" required>
+    </div>
+    <div class="p-row">
+      <div class="p-field">
+        <label>Dose</label>
+        <input type="text" name="dose" placeholder="e.g. 10mg">
+      </div>
+      <div class="p-field">
+        <label>Route</label>
+        <input type="text" name="route" placeholder="e.g. Oral">
+      </div>
+    </div>
+    <div class="p-field">
+      <label>Scheduled times</label>
+      <input type="text" name="times" placeholder="e.g. 08:00, 14:00, 20:00">
+      <p class="p-hint">Comma-separated 24-hour times. One eMAR checklist entry is created per time, per day.</p>
+    </div>
+    <div class="p-field">
+      <label>Instructions</label>
+      <textarea name="instructions" placeholder="e.g. Take with food"></textarea>
+    </div>
+    <button type="submit" class="p-btn p-btn-primary">Add medication</button>
+  </form>
+</div>
+
+{% endblock %}

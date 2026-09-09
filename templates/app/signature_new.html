@@ -1,0 +1,33 @@
+{% extends "app/layout.html" %}
+{% block title %}New Document{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_signatures') }}">← Digital Signature</a></div>
+
+<div class="papp-head"><div><h1>New document</h1></div></div>
+
+<div class="p-card" style="max-width:600px;">
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-field">
+      <label>Title</label>
+      <input type="text" name="title" placeholder="e.g. Care Plan Acknowledgment" required>
+    </div>
+    <div class="p-field">
+      <label>Resident (optional)</label>
+      <select name="resident_id">
+        <option value="">— Facility-wide —</option>
+        {% for r in residents %}
+        <option value="{{ r['id'] }}">{{ r['name'] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="p-field">
+      <label>Document text</label>
+      <textarea name="body" rows="8" placeholder="Paste or write the consent / agreement text here…"></textarea>
+    </div>
+    <button type="submit" class="p-btn p-btn-primary">Create document</button>
+  </form>
+</div>
+
+{% endblock %}

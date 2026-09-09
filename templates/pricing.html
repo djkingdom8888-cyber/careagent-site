@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}{{ c.site.name }} Pricing — {{ c.pricing.hero.heading }}{% endblock %}
+{% block description %}{{ c.pricing.hero.text }}{% endblock %}
+{% block content %}
+
+<section class="page-hero">
+  <div class="wrap">
+    <span class="eyebrow">{{ c.pricing.hero.eyebrow }}</span>
+    <h1>{{ c.pricing.hero.heading }}</h1>
+    <p>{{ c.pricing.hero.text }}</p>
+  </div>
+</section>
+
+<!-- ============ PLANS ============ -->
+<section class="section bg-white" id="plans">
+  <div class="wrap">
+    <div class="billing-toggle">
+      <span class="label-monthly active">Monthly</span>
+      <button class="switch"><span class="knob"></span></button>
+      <span class="label-annual">Annual <span class="save-badge">Save 15%</span></span>
+    </div>
+
+    <div class="pricing-grid">
+      {% for plan in c.pricing.plans %}
+      <div class="price-card {{ 'featured' if plan.featured }}">
+        {% if plan.featured and plan.badge %}<span class="badge">{{ plan.badge }}</span>{% endif %}
+        <h3>{{ plan.name }}</h3>
+        <p class="desc">{{ plan.desc }}</p>
+        <div class="amount">
+          <strong data-monthly="{{ plan.price_monthly }}" data-annual="{{ plan.price_annual }}">{{ plan.price_monthly }}</strong>
+          {% if plan.price_suffix %}<span>{{ plan.price_suffix }}</span>{% endif %}
+        </div>
+        <a href="{{ url_for('index') }}#demo" class="btn {{ 'btn-primary' if plan.featured else 'btn-outline' }} btn-block">{{ plan.cta_label }}</a>
+        <ul class="price-features">
+          {% for f in plan.features %}
+          <li><span class="ck">✓</span>{{ f }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADD-ONS ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Add-ons</span>
+      <h2>Extend any plan</h2>
+      <p>Add capability as your community's needs grow.</p>
+    </div>
+    <div class="addon-grid">
+      {% for a in c.pricing.addons %}
+      <div class="addon-card">
+        <h4>{{ a.name }}</h4>
+        <p>{{ a.text }}</p>
+        <div class="price">{{ a.price }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section bg-white" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq-list">
+      {% for item in c.pricing.faq %}
+      <div class="faq-item {{ 'open' if loop.first }}">
+        <button class="faq-q"><span>{{ item.q }}</span><span class="plus">+</span></button>
+        <div class="faq-a"><p>{{ item.a }}</p></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>{{ c.pricing.cta.heading }}</h2>
+      <p>{{ c.pricing.cta.text }}</p>
+      <div class="hero-ctas">
+        <a href="{{ url_for('index') }}#demo" class="btn btn-primary btn-lg">Book a Demo</a>
+        <a href="{{ url_for('about') }}" class="btn btn-outline btn-lg">Learn About Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

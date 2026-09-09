@@ -1,0 +1,55 @@
+{% extends "app/layout.html" %}
+{% block title %}Manage Facility{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>Manage Facility</h1>
+    <p>{{ facility.name if facility else '' }}</p>
+  </div>
+</div>
+
+<div class="p-card">
+  <h3>Staff logins</h3>
+  {% if staff %}
+  <table class="p-table">
+    <thead><tr><th>Username</th><th>Name</th><th>Role</th></tr></thead>
+    <tbody>
+      {% for u in staff %}
+      <tr>
+        <td>{{ u['username'] }}</td>
+        <td>{{ u['full_name'] or '—' }}</td>
+        <td><span class="badge {{ 'given' if u['role'] == 'owner' else 'due' }}">{{ 'Owner / Admin' if u['role'] == 'owner' else 'Caregiver' }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="p-empty">No staff yet.</p>
+  {% endif %}
+</div>
+
+<div class="p-card" style="max-width:520px;">
+  <h3>Add a staff login</h3>
+  <p class="sub">Give another caregiver or administrator their own login to this facility.</p>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-row">
+      <div class="p-field"><label>Username</label><input type="text" name="username" required></div>
+      <div class="p-field"><label>Full name</label><input type="text" name="full_name"></div>
+    </div>
+    <div class="p-row">
+      <div class="p-field"><label>Password</label><input type="text" name="password" minlength="8" required></div>
+      <div class="p-field">
+        <label>Role</label>
+        <select name="role">
+          <option value="caregiver">Caregiver</option>
+          <option value="owner">Owner / Administrator</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="p-btn p-btn-primary">Add login</button>
+  </form>
+</div>
+
+{% endblock %}

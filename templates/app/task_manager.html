@@ -1,0 +1,42 @@
+{% extends "app/layout.html" %}
+{% block title %}Task Manager{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>Task Manager</h1>
+    <p>Every ADL/task across the facility, today · {{ today }}</p>
+  </div>
+</div>
+
+<div class="p-card">
+  {% if rows %}
+    {% for row in rows %}
+    <div class="chart-row">
+      <div class="info">
+        <strong>{{ row['title'] }} — {{ row['resident_name'] }} <span style="font-weight:400; color:var(--p-slate);">(Room {{ row['room'] or '—' }})</span></strong>
+        <span>{{ row['shift']|capitalize }} shift</span>
+      </div>
+      <div class="chart-actions">
+        <span class="badge {{ row['status'] }}">{{ row['status']|capitalize }}</span>
+        {% for s in ['done', 'missed'] %}
+        <form method="post" action="{{ url_for('app_task_mark', resident_id=row['resident_id'], task_log_id=row['id']) }}" style="display:inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="status" value="{{ s }}">
+          <input type="hidden" name="next" value="task-manager">
+          <button type="submit" class="p-btn p-btn-outline p-btn-sm">{{ s|capitalize }}</button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="widget-empty" style="padding:30px 8px;">
+      <span class="emoji">✅</span>
+      <strong>No tasks left undone.</strong>
+      <span>A perfect track record!</span>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "app/layout.html" %}
+{% block title %}Resident Care{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>Resident Care</h1>
+    <p>Today's snapshot for everyone in your care.</p>
+  </div>
+  {% if session.get('app_role') == 'owner' %}
+  <a href="{{ url_for('app_resident_new') }}" class="p-btn p-btn-primary">+ Add resident</a>
+  {% endif %}
+</div>
+
+{% if residents %}
+<div class="resident-grid">
+  {% for r in residents %}
+  <a class="resident-card" href="{{ url_for('app_resident_detail', resident_id=r['id']) }}">
+    <div class="avatar">{{ r['name'][:2]|upper }}</div>
+    <strong>{{ r['name'] }}</strong>
+    <span>Room {{ r['room'] or '—' }}</span>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="p-card">
+  <div class="widget-empty" style="padding:30px 8px;">
+    <span class="emoji">🐼</span>
+    <strong>No residents yet?</strong>
+    <span>Must be a quiet place!</span>
+  </div>
+  {% if session.get('app_role') == 'owner' %}
+  <p style="text-align:center; margin-top:6px;"><a href="{{ url_for('app_resident_new') }}" style="color:var(--p-teal-600); font-weight:700; font-size:13.5px;">+ Add your first resident</a></p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

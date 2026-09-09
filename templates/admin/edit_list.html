@@ -1,0 +1,63 @@
+{% extends "admin/layout.html" %}
+{% import "admin/_macros.html" as m %}
+{% block title %}{{ schema.title }}{% endblock %}
+{% block heading %}{{ schema.title }}{% endblock %}
+{% block topbar_actions %}
+  <button type="submit" form="main-form" class="a-btn a-btn-primary">Save changes</button>
+{% endblock %}
+{% block content %}
+
+<form id="main-form" method="post" action="{{ url_for('admin_section', slug=slug) }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+{% if not node %}
+<div class="a-card"><p class="a-empty" style="padding:0;">Nothing here yet — add the first one below.</p></div>
+{% endif %}
+
+{% for item in node %}
+<div class="a-card a-list-item">
+  <span class="a-list-index">#{{ loop.index }}</span>
+  {% if schema.kind == 'stringlist' %}
+    {{ m.text_input('item-' ~ loop.index0, item) }}
+  {% else %}
+    {% for f in schema.fields %}
+    <div class="a-field">
+      <label>{{ f.label }}</label>
+      {% set val = (item.get(f.key, []) | join('\n')) if f.get('type') == 'lines' else item.get(f.key, '') %}
+      {{ m.render_field('item-' ~ loop.index0 ~ '-' ~ f.key, val, f) }}
+    </div>
+    {% endfor %}
+  {% endif %}
+  <div class="a-list-item-foot">
+    <button type="submit" formaction="{{ url_for('admin_section_delete', slug=slug, idx=loop.index0) }}" formmethod="post" class="a-btn a-btn-danger a-btn-sm" onclick="return confirm('Remove this item?')">Delete</button>
+  </div>
+</div>
+{% endfor %}
+
+<div class="a-sticky-save">
+  <button type="submit" class="a-btn a-btn-primary">Save changes</button>
+  <span class="a-hint">Saves everything on this page, including any edits above.</span>
+</div>
+</form>
+
+<div class="a-card a-add-card">
+  <h3>Add new {{ schema.item_label or 'item' }}</h3>
+  <form action="{{ url_for('admin_section_add', slug=slug) }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% if schema.kind == 'stringlist' %}
+      <div class="a-field">
+        <input type="text" name="new" placeholder="{{ schema.item_label or 'New item' }}">
+      </div>
+    {% else %}
+      {% for f in schema.fields %}
+      <div class="a-field">
+        <label>{{ f.label }}</label>
+        {{ m.render_field('new-' ~ f.key, '', f) }}
+      </div>
+      {% endfor %}
+    {% endif %}
+    <button type="submit" class="a-btn a-btn-outline">+ Add</button>
+  </form>
+</div>
+
+{% endblock %}

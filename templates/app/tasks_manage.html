@@ -1,0 +1,64 @@
+{% extends "app/layout.html" %}
+{% block title %}Tasks — {{ resident['name'] }}{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_resident_detail', resident_id=resident['id']) }}">← {{ resident['name'] }}</a></div>
+
+<div class="papp-head">
+  <div>
+    <h1>Tasks &amp; ADLs</h1>
+    <p>Manage {{ resident['name'] }}'s daily task list. Each active task appears on the daily checklist.</p>
+  </div>
+</div>
+
+<div class="p-card">
+  <h3>Current tasks</h3>
+  {% if tasks %}
+  <table class="p-table">
+    <thead><tr><th>Task</th><th>Shift</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for t in tasks %}
+      <tr>
+        <td>{{ t['title'] }}</td>
+        <td>{{ t['shift']|capitalize }}</td>
+        <td>{% if t['active'] %}<span class="badge given">Active</span>{% else %}<span class="badge missed">Inactive</span>{% endif %}</td>
+        <td>
+          {% if t['active'] %}
+          <form method="post" action="{{ url_for('app_task_deactivate', resident_id=resident['id'], task_id=t['id']) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="p-btn p-btn-danger p-btn-sm">Deactivate</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="p-empty">No tasks yet — add the first one below.</p>
+  {% endif %}
+</div>
+
+<div class="p-card" style="max-width:560px;">
+  <h3>Add a task</h3>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-field">
+      <label>Task title</label>
+      <input type="text" name="title" placeholder="e.g. Assist with bathing" required>
+    </div>
+    <div class="p-field">
+      <label>Shift</label>
+      <select name="shift">
+        <option value="any">Any</option>
+        <option value="morning">Morning</option>
+        <option value="afternoon">Afternoon</option>
+        <option value="evening">Evening</option>
+        <option value="night">Night</option>
+      </select>
+    </div>
+    <button type="submit" class="p-btn p-btn-primary">Add task</button>
+  </form>
+</div>
+
+{% endblock %}

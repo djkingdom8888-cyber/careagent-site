@@ -1,0 +1,101 @@
+{% extends "app/layout.html" %}
+{% block title %}{{ form['name'] }}{% endblock %}
+{% block content %}
+
+<div class="papp-crumb"><a href="{{ url_for('app_forms') }}">← Form Builder</a></div>
+
+<div class="papp-head">
+  <div>
+    <h1>{{ form['name'] }}</h1>
+    <p>{{ form['description'] or '' }}</p>
+  </div>
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    {% if fields %}<a href="{{ url_for('app_form_fill', form_id=form['id']) }}" class="p-btn p-btn-primary">Fill out this form</a>{% endif %}
+    {% if session.get('app_role') == 'owner' and form['active'] %}
+    <form method="post" action="{{ url_for('app_form_deactivate', form_id=form['id']) }}" onsubmit="return confirm('Deactivate this form?');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="p-btn p-btn-danger">Deactivate</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+<div class="p-card">
+  <h3>Fields</h3>
+  {% if fields %}
+    {% for f in fields %}
+    <div class="chart-row">
+      <div class="info">
+        <strong>{{ f['label'] }} {% if f['required'] %}<span style="color:var(--p-red);">*</span>{% endif %}</strong>
+        <span>{{ f['field_type']|capitalize }}{% if f['options'] %} — options: {{ f['options'] }}{% endif %}</span>
+      </div>
+      {% if session.get('app_role') == 'owner' %}
+      <form method="post" action="{{ url_for('app_form_field_delete', form_id=form['id'], field_id=f['id']) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="p-btn p-btn-danger p-btn-sm">Remove</button>
+      </form>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="p-empty">No fields yet{% if session.get('app_role') == 'owner' %} — add one below{% endif %}.</p>
+  {% endif %}
+</div>
+
+{% if session.get('app_role') == 'owner' %}
+<div class="p-card" style="max-width:560px;">
+  <h3>Add a field</h3>
+  <form method="post" action="{{ url_for('app_form_field_add', form_id=form['id']) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="p-row">
+      <div class="p-field"><label>Label</label><input type="text" name="label" placeholder="e.g. Description of incident" required></div>
+      <div class="p-field">
+        <label>Type</label>
+        <select name="field_type">
+          <option value="text">Short text</option>
+          <option value="textarea">Long text</option>
+          <option value="select">Dropdown</option>
+          <option value="checkbox">Checkbox</option>
+          <option value="date">Date</option>
+        </select>
+      </div>
+    </div>
+    <div class="p-field">
+      <label>Dropdown options (only used for Dropdown type)</label>
+      <input type="text" name="options" placeholder="e.g. Minor, Moderate, Severe">
+    </div>
+    <label class="a-checkbox" style="margin-bottom:14px; display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600;">
+      <input type="checkbox" name="required" style="width:17px;height:17px;"> Required field
+    </label>
+    <button type="submit" class="p-btn p-btn-primary">Add field</button>
+  </form>
+</div>
+
+<div class="p-card">
+  <h3>Submissions</h3>
+  {% if submissions %}
+  <table class="p-table">
+    <thead><tr><th>Date</th><th>Resident</th><th>Submitted by</th><th>Responses</th></tr></thead>
+    <tbody>
+      {% for s in submissions %}
+      <tr>
+        <td>{{ s.submitted_at }}</td>
+        <td>{{ s.resident_name or '—' }}</td>
+        <td>{{ s.submitted_by_username or '—' }}</td>
+        <td>
+          {% for f in fields %}
+            {% set v = s.data.get(f['id']|string, '') %}
+            {% if v %}<div><strong>{{ f['label'] }}:</strong> {{ 'Yes' if v == True else v }}</div>{% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="p-empty">No submissions yet.</p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

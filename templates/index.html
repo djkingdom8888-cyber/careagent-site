@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %}{{ c.site.name }} — AI-Powered Software for Residential Care{% endblock %}
+{% block description %}{{ c.home.hero.lead }}{% endblock %}
+{% block content %}
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow">● {{ c.home.hero.eyebrow }}</span>
+      <h1>{{ c.home.hero.heading }} <span class="accent">{{ c.home.hero.heading_accent }}</span></h1>
+      <p class="lead">{{ c.home.hero.lead }}</p>
+      <div class="hero-ctas">
+        <a href="{{ url_for('pricing') }}" class="btn btn-primary btn-lg">{{ c.home.hero.cta_primary }}</a>
+        <a href="#demo" class="btn btn-outline btn-lg">{{ c.home.hero.cta_secondary }}</a>
+      </div>
+      <div class="hero-meta">
+        {% for s in c.home.hero.stats %}
+        <div><strong>{{ s.value }}</strong>{{ s.label }}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <div class="mock-window">
+        <div class="mock-titlebar"><i></i><i></i><i></i></div>
+        <div class="mock-body">
+          <div class="mock-row">
+            <div class="who"><span class="avatar"></span>Eleanor R. — Room 214</div>
+            <span class="tag ok">eMAR complete</span>
+          </div>
+          <div class="mock-row">
+            <div class="who"><span class="avatar"></span>James T. — Room 108</div>
+            <span class="tag due">ADL due 2:00p</span>
+          </div>
+          <div class="mock-row">
+            <div class="who"><span class="avatar"></span>Marta S. — Room 301</div>
+            <span class="tag alert">Vitals alert</span>
+          </div>
+          <div class="mock-row">
+            <div class="who"><span class="avatar"></span>Wei L. — Room 122</div>
+            <span class="tag ok">Care plan signed</span>
+          </div>
+        </div>
+      </div>
+      <div class="float-card float-1"><span class="dot"></span>AI flagged 1 late task</div>
+      <div class="float-card float-2"><span class="dot"></span>HIPAA audit log ready</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LOGOS ================= -->
+<section class="logo-strip">
+  <div class="wrap">
+    <p>Trusted by {{ c.home.hero.stats[0].value }} care communities nationwide</p>
+    <div class="logo-row">
+      {% for logo in c.home.logos %}
+      <span>{{ logo }}</span>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY CAREAGENT ================= -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why {{ c.site.name }}</span>
+      <h2>Everything a care team needs, nothing they don't</h2>
+      <p>Purpose-built for residential and long-term care — not a generic hospital EHR forced to fit.</p>
+    </div>
+    <div class="value-grid">
+      {% for v in c.home.value_props %}
+      <div class="value-card">
+        <div class="ic">{{ v.icon }}</div>
+        <h3>{{ v.title }}</h3>
+        <p>{{ v.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRODUCT ================= -->
+<section class="section bg-white" id="product">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Product</span>
+      <h2>One platform, eight connected modules</h2>
+      <p>Every part of daily care operations, documented and connected in real time.</p>
+    </div>
+    <div class="product-grid">
+      {% for p in c.home.products %}
+      <div class="product-card">
+        <div class="ic">{{ p.icon }}</div>
+        <h3>{{ p.title }}</h3>
+        <p>{{ p.text }}</p>
+        <span class="learn">Learn more →</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ================= AI BANNER ================= -->
+<section class="section">
+  <div class="wrap">
+    <div class="ai-banner">
+      <div>
+        <span class="eyebrow">{{ c.home.ai_banner.eyebrow }}</span>
+        <h2>{{ c.home.ai_banner.heading }}</h2>
+        <p>{{ c.home.ai_banner.text }}</p>
+        <ul class="ai-points">
+          {% for pt in c.home.ai_banner.points %}
+          <li><b>›</b> {{ pt }}</li>
+          {% endfor %}
+        </ul>
+        <a href="#demo" class="btn btn-primary" style="margin-top:24px;">{{ c.home.ai_banner.cta }}</a>
+      </div>
+      <div class="ai-visual">
+        {% for line in c.home.ai_banner.chat %}
+        <div class="ai-chat-line {{ 'me' if line['from'] == 'me' else '' }}">
+          <div class="bubble">{{ line.text }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMPLIANCE ================= -->
+<section class="section bg-white">
+  <div class="wrap">
+    <div class="compliance">
+      <div>
+        <span class="eyebrow">{{ c.home.compliance.eyebrow }}</span>
+        <h2 style="font-size:clamp(26px,3vw,36px); margin-top:16px; color:var(--navy);">{{ c.home.compliance.heading }}</h2>
+        <ul class="check-list">
+          {% for item in c.home.compliance.checklist %}
+          <li><span class="ck">✓</span>{{ item }}</li>
+          {% endfor %}
+        </ul>
+        <div class="compliance-stats">
+          {% for s in c.home.compliance.stats %}
+          <div class="stat-box"><strong>{{ s.value }}</strong><span>{{ s.label }}</span></div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="compliance-panel">
+        <h3 style="color:var(--navy); font-size:16px; margin-bottom:14px;">Live audit trail</h3>
+        {% for row in c.home.compliance.audit_rows %}
+        <div class="audit-row"><span>{{ row.label }}</span><span>{{ row.status }}</span></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="section" id="testimonials">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">{{ c.home.testimonials.eyebrow }}</span>
+      <h2>{{ c.home.testimonials.heading }}</h2>
+    </div>
+    <div class="testi-grid">
+      {% for t in c.home.testimonials.quotes %}
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"{{ t.quote }}"</p>
+        <div class="testi-person"><span class="avatar"></span><div><strong>{{ t.name }}</strong><span>{{ t.role }}</span></div></div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="rating-strip">
+      {% for r in c.home.testimonials.ratings %}
+      <div><strong>{{ r.value }}</strong><span>{{ r.label }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="section" id="demo">
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>{{ c.home.cta.heading }}</h2>
+      <p>{{ c.home.cta.text }}</p>
+      <div class="hero-ctas">
+        <a href="{{ url_for('pricing') }}" class="btn btn-primary btn-lg">{{ c.home.hero.cta_primary }}</a>
+        <a href="#demo-form" class="btn btn-outline btn-lg" onclick="document.getElementById('demo-form').scrollIntoView({behavior:'smooth'})">{{ c.home.hero.cta_secondary }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEMO FORM ================= -->
+<section class="section bg-white">
+  <div class="wrap" style="max-width:640px;">
+    <div class="section-head">
+      <span class="eyebrow">Book a demo</span>
+      <h2>Tell us about your community</h2>
+      <p>We'll follow up within one business day to schedule your walkthrough.</p>
+    </div>
+    <form id="demo-form" style="display:grid; gap:16px;">
+      <input required type="text" placeholder="Full name" style="padding:14px 16px; border:1px solid var(--border); border-radius:10px; font-size:15px;">
+      <input required type="email" placeholder="Work email" style="padding:14px 16px; border:1px solid var(--border); border-radius:10px; font-size:15px;">
+      <input type="text" placeholder="Community name" style="padding:14px 16px; border:1px solid var(--border); border-radius:10px; font-size:15px;">
+      <input type="text" placeholder="Number of residents" style="padding:14px 16px; border:1px solid var(--border); border-radius:10px; font-size:15px;">
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Request a demo</button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

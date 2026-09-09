@@ -1,0 +1,19 @@
+{% extends "app/layout.html" %}
+{% block title %}{{ label }}{% endblock %}
+{% block content %}
+
+<div class="papp-head">
+  <div>
+    <h1>{{ label }}</h1>
+  </div>
+</div>
+
+<div class="p-card">
+  <div class="widget-empty" style="padding:36px 8px;">
+    <span class="emoji">🚧</span>
+    <strong>{{ label }} isn't built yet.</strong>
+    <span>This module is on the roadmap — ask and it can be prioritized.</span>
+  </div>
+</div>
+
+{% endblock %}
